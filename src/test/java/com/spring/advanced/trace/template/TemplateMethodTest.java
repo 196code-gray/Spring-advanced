@@ -50,4 +50,33 @@ public class TemplateMethodTest {
         template2.execute();
 
     }
+
+    /*
+    템플릿 메서드 패턴을 익명 내부 클래스로 구현.
+    앞서 만든 템플릿 메서드 패턴의 경우 클래스를 굳이 만들어줘야 함.
+    익명 내부 클래스를 사용하게 될 경우 불필요한 클래스를 만들 필요 x
+     */
+    @Test
+    void templateMethodV2(){
+        AbstractTemplate template1 = new AbstractTemplate(){
+
+            @Override
+            protected void call() {
+                log.info("비즈니스 로직1 실행");
+            }
+        };
+        log.info("클래스 이름1={}", template1.getClass());
+
+        template1.execute();
+        AbstractTemplate template2 = new AbstractTemplate(){
+
+            @Override
+            protected void call() {
+                log.info("비즈니스 로직2 실행");
+            }
+        };
+        log.info("클래스 이름2={}", template2.getClass());
+
+        template2.execute();
+    }
 }
