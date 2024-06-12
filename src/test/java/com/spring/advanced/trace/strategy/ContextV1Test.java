@@ -1,6 +1,7 @@
 package com.spring.advanced.trace.strategy;
 
 import com.spring.advanced.trace.strategy.code.strategy.ContextV1;
+import com.spring.advanced.trace.strategy.code.strategy.Strategy;
 import com.spring.advanced.trace.strategy.code.strategy.StrategyLogic1;
 import com.spring.advanced.trace.strategy.code.strategy.StrategyLogic2;
 import com.spring.advanced.trace.template.code.AbstractTemplate;
@@ -47,16 +48,6 @@ public class ContextV1Test {
     }
 
     @Test
-    void templateMethodV1() {
-        AbstractTemplate template1 = new SubClassLogic1();
-        template1.execute();
-
-        AbstractTemplate template2 = new SubClassLogic2();
-        template2.execute();
-
-    }
-
-    @Test
     void templateMethodV2(){
         AbstractTemplate template1 = new AbstractTemplate(){
 
@@ -78,5 +69,48 @@ public class ContextV1Test {
         log.info("클래스 이름2={}", template2.getClass());
 
         template2.execute();
+    }
+
+    @Test
+    void templateMethodV1() {
+        AbstractTemplate template1 = new SubClassLogic1();
+        template1.execute();
+
+        AbstractTemplate template2 = new SubClassLogic2();
+        template2.execute();
+
+    }
+
+    @Test
+    void strategyV2(){
+        Strategy logic1 = new Strategy() {
+
+            @Override
+            public void call() {
+                log.info("비즈니스 로직1 실행");
+            }
+        };
+        ContextV1 contextV1 = new ContextV1(logic1);
+        log.info("logic1={}", logic1.getClass());
+        contextV1.execute();
+    }
+
+    @Test
+    void strategyV3(){
+        ContextV1 contextV1 = new ContextV1(new Strategy() {
+
+            @Override
+            public void call() {
+                log.info("비즈니스 로직1 실행");
+            }
+        });
+        contextV1.execute();
+    }
+
+    @Test
+    void strategy4(){
+        // 람다를 제공하려면 interface에 메서드가 1개여야 됨.
+        ContextV1 contextV1 = new ContextV1(() -> log.info("비즈니스 로직1 실행"));
+        contextV1.execute();
     }
 }
